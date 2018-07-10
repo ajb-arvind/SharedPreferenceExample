@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">SharedPreference Example</string>
+    <string-array name="Branch">
+        <item>1. Computer</item>
+        <item>2. Mechanical</item>
+        <item>3. EnTc</item>
+        <item>4. Civil</item>
+    </string-array>
+    <string-array name="Year">
+        <item>First Year</item>
+        <item>Second Year</item>
+        <item>Third Year</item>
+        <item>Fourth Year</item>
+    </string-array>
+    <string-array name="Semester">
+        <item>Semester I</item>
+        <item>Semester II</item>
+    </string-array>
+</resources>
