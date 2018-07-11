@@ -1,6 +1,7 @@
 package com.official19.ajb.sharedpreferenceexample;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     EditText NameEt;
     Spinner BranchSpn, YearSpn, SemSpn;
     Button LogInBtn, ClearBtn;
+    SaveUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,33 +46,39 @@ public class MainActivity extends AppCompatActivity {
         SemSpn = (Spinner)findViewById(R.id.spnSem);
         LogInBtn = (Button) findViewById(R.id.btnLogIn);
         ClearBtn = (Button)findViewById(R.id.btnClear);
+        user = new SaveUser(this);
     }
 
     private void saveInfo(){
-        SharedPreferences sharedPreferences = getSharedPreferences("INFO", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("Name", NameEt.getText().toString());
-        editor.putString("Branch", BranchSpn.getSelectedItem().toString());
-        editor.putString("Year", YearSpn.getSelectedItem().toString());
-        editor.putString("Semster", SemSpn.getSelectedItem().toString());
-        editor.apply();
-        Toast.makeText(this, "Saved!", Toast.LENGTH_SHORT).show();
+            if(checkSppiner()) {
+                String name = NameEt.getText().toString();
+                String branch = BranchSpn.getSelectedItem().toString();
+                String year = YearSpn.getSelectedItem().toString();
+                String sem = SemSpn.getSelectedItem().toString();
+                boolean isSaved = user.saveInfo(name, branch, year, sem);
+                if(isSaved) {
+                    Toast.makeText(this, "Saved!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(MainActivity.this, WelcomeActivity.class));
+                }
+                else
+                    Toast.makeText(this, "Error while Saving!", Toast.LENGTH_SHORT).show();
+            }
+            else
+                Toast.makeText(this, "Please Select!!!", Toast.LENGTH_SHORT).show();
     }
 
     private void displayInfo(){
-        SharedPreferences sharedPreferences = getSharedPreferences("INFO", Context.MODE_PRIVATE);
-        String name = sharedPreferences.getString("Name", "");
-        String branch = sharedPreferences.getString("Branch", "");
-        String year = sharedPreferences.getString("Year", "");
-        String semster = sharedPreferences.getString("Semster", "");
-        Print(name, branch+" "+year+" "+semster);
+        user.displayInfo();
     }
 
-    private void Print(String title, String message){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(true);
-        builder.setTitle(title);
-        builder.setMessage(message);
-        builder.show();
+    private boolean checkSppiner(){
+        if(BranchSpn.getSelectedItemPosition()>0 &&
+                YearSpn.getSelectedItemPosition()>0 && SemSpn.getSelectedItemPosition()>0){
+            return true;
+        }
+        else
+            return false;
     }
+
+
 }
